@@ -34,8 +34,15 @@ class KampuzNestApp extends StatelessWidget {
   }
 }
 
-class MainShell extends StatelessWidget {
+class MainShell extends StatefulWidget {
   const MainShell({super.key});
+
+  @override
+  State<MainShell> createState() => _MainShellState();
+}
+
+class _MainShellState extends State<MainShell> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   static const _pages = [
     HomePage(),
@@ -49,8 +56,25 @@ class MainShell extends StatelessWidget {
     final appState = context.watch<AppState>();
 
     return Scaffold(
+      key: _scaffoldKey,
       drawer: const AppDrawer(),
-      body: _pages[appState.currentIndex],
+      body: Stack(
+        children: [
+          _pages[appState.currentIndex],
+          SafeArea(
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Material(
+                color: Colors.transparent,
+                child: IconButton(
+                  icon: const Icon(Icons.menu),
+                  onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: appState.currentIndex,
         onDestinationSelected: appState.setIndex,
