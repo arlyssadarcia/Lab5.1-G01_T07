@@ -26,7 +26,7 @@ class KampuzNestApp extends StatelessWidget {
       title: 'KampuzNest',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
         useMaterial3: true,
       ),
       home: const MainShell(),
