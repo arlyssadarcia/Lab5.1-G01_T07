@@ -34,6 +34,8 @@ class KampuzNestApp extends StatelessWidget {
   }
 }
 
+/// StatefulWidget only for Scaffold GlobalKey (drawer button).
+/// Navigation index lives in AppState (Provider), not in this State class.
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
 
@@ -53,14 +55,16 @@ class _MainShellState extends State<MainShell> {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<AppState>();
+    final currentIndex = context.select<AppState, int>(
+      (state) => state.currentIndex,
+    );
 
     return Scaffold(
       key: _scaffoldKey,
       drawer: const AppDrawer(),
       body: Stack(
         children: [
-          _pages[appState.currentIndex],
+          _pages[currentIndex],
           SafeArea(
             child: Align(
               alignment: Alignment.topLeft,
@@ -76,8 +80,8 @@ class _MainShellState extends State<MainShell> {
         ],
       ),
       bottomNavigationBar: NavigationBar(
-        selectedIndex: appState.currentIndex,
-        onDestinationSelected: appState.setIndex,
+        selectedIndex: currentIndex,
+        onDestinationSelected: context.read<AppState>().setIndex,
         destinations: const [
           NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
           NavigationDestination(icon: Icon(Icons.people), label: 'Students'),
